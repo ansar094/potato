@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Potato Maps</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" type="image/png" href="assets/potato.png">
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+</head>
+<body>
+    <div id="taskbar">
+        <div id="name"><a href="home.html"><h1>Potato <br>pot-hate-oh </h1></a></div>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        const map = L.map('map').setView([12.807594, 74.888226], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // ⭐ Add routing control
+        L.Routing.control({
+            waypoints: [
+                L.latLng(12.807594, 74.888226),   // Example Start
+                L.latLng(12.9141, 74.8559)        // Example End
+            ],
+            routeWhileDragging: true
+        }).addTo(map);
+    </script>
+
+    <!-- Pothole marker updating script -->
+    <script>
+        let lastTimestamp = null;
+
+        const potholeIcon = L.icon({
+          iconUrl: 'assets/marker.png', 
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -35]
+        });
+
+        function addPotholeMarker(lat, lng, info) {
+          const marker = L.marker([lat, lng], {icon: potholeIcon}).addTo(map);
+          marker.bindPopup(info).openPopup();
+        }
+
+        async function pollPothole() {
+          try {
+            const resp = await fetch("http://localhost:5000/pothole");
+            if (!resp.ok) return;
+            const data = await resp.json();
+            if (data && data.event === "pothole") {
+              if (data.timestamp !== lastTimestamp) {
+                lastTimestamp = data.timestamp;
+                const info = `Time: ${data.timestamp}<br>Image: ${data.image || 'n/a'}`;
+                addPotholeMarker(data.lat, data.lng, info);
+              }
+            }
+          } catch(e) {
+            // console.log("poll error", e);
+          }
+        }
+
+        setInterval(pollPothole, 2000);
+    </script>
+</body>
+</html>

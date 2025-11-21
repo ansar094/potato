@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potato</title>
+    <link rel="icon" type="image/png" href="assets/potato.png">
+    <style>
+        /* --- 1. PAGE SETUP --- */
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        /* --- 2. THE UI (NAVBAR) --- */
+        .glass-nav {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            width: 90%;
+            max-width: 500px;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+            background: linear-gradient(90deg, #ffdd57, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* --- 3. CENTER TEXT BOX (NEW) --- */
+        .hero-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centers exactly */
+            z-index: 10; /* Sits above the stars */
+            
+            text-align: center;
+            width: 80%;
+            max-width: 700px;
+            padding: 40px;
+            
+            /* Optional: Subtle Glass Effect backing */
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .hero-box h1 {
+            font-size: 4rem;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            
+            /* Gradient Text Effect */
+            background: linear-gradient(135deg, #ffffff 0%, #a5a5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-box p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        /* --- 4. THE HYPERSPEED ANIMATION --- */
+        .scene {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            perspective: 800px;
+            transform: translate(-50%, -50%);
+        }
+
+        .star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            transform-origin: 0 50%;
+            opacity: 0;
+        }
+
+        @keyframes hyperspeed {
+            0% { transform: rotate(var(--angle)) translateX(var(--radius)) translateZ(-800px) scaleX(0.1); opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: rotate(var(--angle)) translateX(var(--radius)) translateZ(200px) scaleX(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="glass-nav">
+        <div class="logo">potato</div>
+        <div class="nav-links">
+            <a href="maps.html">Maps</a>
+            
+        </div>
+    </nav>
+
+    <div class="hero-box">
+        <h1>Pot-Hate-Oh</h1>
+        <p>
+            Potato is our solution for automated potholes reporting and mapping. It leverages sensors and an AI model to detect potholes in real-time, allowing users to contribute data effortlessly while driving.
+        </p>
+    </div>
+
+    <div class="scene" id="scene"></div>
+
+    <script>
+        const starCount = 100; 
+        const scene = document.getElementById('scene');
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            const angle = Math.random() * 360; 
+            const radius = 50 + Math.random() * 300; 
+            const duration = 1.5 + Math.random() * 2; 
+            const delay = Math.random() * -4; 
+            const length = 100 + Math.random() * 200; 
+
+            star.style.setProperty('--angle', `${angle}deg`);
+            star.style.setProperty('--radius', `${radius}px`);
+            
+            star.style.width = `${length}px`;
+            star.style.animation = `hyperspeed ${duration}s linear infinite`;
+            star.style.animationDelay = `${delay}s`;
+
+            scene.appendChild(star);
+        }
+    </script>
+
+</body>
+</html>
