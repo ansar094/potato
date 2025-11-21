@@ -1,0 +1,49 @@
+.science-gothic {
+  font-family: "Science Gothic", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "wdth" 100,
+    "CTRS" 0;
+}
+a{
+  text-decoration: none;
+  color: white;
+}
+html{
+  scroll-behavior:smooth;
+}
+html, body {
+  height: 100%;  /* Important for map to fill viewport */
+  margin: 0;
+  font-family: "Science Gothic", sans-serif;
+}
+#taskbar {
+  background-color: #000000;
+  padding: 10px;
+  position: fixed; top:0; width:100%; z-index: 1000;
+  text-align: center;
+  color: white;
+  height: 10vh;
+  font-size: small;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#sheets{
+    margin-right: 50px;
+}
+
+#map {
+  margin-top: 10vh;           /* Push down below taskbar */
+  height: 100%;                /* Remaining viewport height */
+}
+/* Target the specific container for Leaflet top controls */
+.leaflet-top {
+    /* 10vh (taskbar height) + 10px (standard padding) */
+    top: calc(10vh + 20px) !important; 
+}
+
+
